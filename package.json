@@ -6,7 +6,7 @@
 	"publisher": "Paskie",
 	"version": "1.2.0",
 	"repository": {
-		"url": "https://github.com/Paskie0/raythis"
+		"url": "https://github.com/Paskie0/raythis-plus"
 	},
 	"engines": {
 		"vscode": "^1.53.0"
