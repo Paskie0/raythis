@@ -32,7 +32,35 @@
 				"command": "ray-this.publishSelectedSnippet",
 				"title": "RayThis: Upload Snippet"
 			}
-		]
+		],
+		"configuration": {
+			"title": "RayThis",
+			"properties": {
+				"ray-this.background": {
+				  "type": "string",
+				  "enum": ["true", "false"],
+				  "default": "true",
+				  "description": "Transparent background"
+				},
+				"ray-this.darkMode": {
+				  "type": "string",
+				  "enum": ["true", "false"],
+				  "default": "true"
+				},
+				"ray-this.padding": {
+				  "type": "string",
+				  "enum": ["16", "32", "64", "128"],
+				  "default": "32",
+				  "description": "Set a default padding"
+				},
+				"ray-this.theme": {
+					"type": "string",
+					"enum": ["breeze", "candy", "crimson", "falcon", "meadow", "midnight", "mono", "raindrop", "sunset"],
+					"default": "Breeze",
+					"description": "Set a default theme"
+				}
+			}
+		  }
 	},
 	"scripts": {
 		"lint": "eslint .",
@@ -40,13 +68,13 @@
 		"test": "node ./test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.53.0",
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.0.4",
 		"@types/node": "^12.11.7",
+		"@types/vscode": "^1.53.0",
 		"eslint": "^7.19.0",
 		"glob": "^7.1.6",
-		"mocha": "^8.2.1",
+		"mocha": "^10.4.0",
 		"typescript": "^4.1.3",
 		"vscode-test": "^1.5.0"
 	},

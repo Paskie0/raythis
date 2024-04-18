@@ -19,7 +19,7 @@ const generateEncodedCode = str => Buffer.from(str).toString("base64");
  * @param {Object} [options]
 		Query parameters to be used to 
 		construct the completed request.
-	* @param {('candy'|'breeze'|'midnight'|'sunset')} [options.colors]
+	* @param {('breeze'|'candy'|'crimson'|'falcon'|'meadow'|'midnight'|'mono'|'raindrop'|'sunset')} [options.theme]
 		The color scheme you want the
 		uploaded code to have.
 	* @param {(
@@ -81,6 +81,12 @@ function getLanguageName() {
 }
 
 function activate(context) {
+
+  const config = vscode.workspace.getConfiguration("ray-this");
+  const background = config.get("background");
+  const darkMode = config.get("darkMode");
+  const padding = config.get("padding");
+  const theme = config.get("theme");
 	
 	const publishSelectedSnippet = vscode.commands.registerCommand("ray-this.publishSelectedSnippet", () => {
 		const { 
@@ -110,9 +116,11 @@ function activate(context) {
 		// * Generate URL & open in default browser,
 		// * then send success message.
 		const url = generateRayUrl(correctIndentation(selectedContent), {
-			title: "Uploaded using RayThis Extension",
-			colors: "breeze",
-			padding: "16"
+			title: path.basename(vscode.window.activeTextEditor.document.fileName),
+      background: background,
+      darkMode: darkMode,
+			padding: padding,
+			theme: theme
 		});
 		
 		showInformationMessage(
