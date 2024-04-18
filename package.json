@@ -1,12 +1,12 @@
 {
 	"name": "raythis",
-	"displayName": "RayThis: Instant Beautiful Code Screenshots",
+	"displayName": "RayThis+: Instant Beautiful Code Screenshots",
 	"description": "Instantly deploy beautiful code snippets to Ray.so without leaving your coding environment.",
 	"icon": "256x256.png",
-	"publisher": "Goopware",
-	"version": "1.1.1",
+	"publisher": "Paskie",
+	"version": "1.2.0",
 	"repository": {
-		"url": "https://github.com/ridarf/raythis"
+		"url": "https://github.com/Paskie0/raythis"
 	},
 	"engines": {
 		"vscode": "^1.53.0"
