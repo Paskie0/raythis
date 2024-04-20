@@ -39,3 +39,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Added an option to switch the title between fileName (e.g. index.html) and none (invisible character)
 - Added a context menu option for easy access
 - Added a lil picture emoji to the publish command 🖼️
+
+## [1.3.1] - 2024-04-20
+
+### Fixed
+- Nothing really, just a small oopsie
