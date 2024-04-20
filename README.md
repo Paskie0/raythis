@@ -1,6 +1,6 @@
 # RayThis+
 
-An updated version of [RayThis](https://github.com/ridafkih/raythis)
+An updated version of [RayThis](https://marketplace.visualstudio.com/items?itemName=Goopware.raythis)
 
 This version includes:
 - Config options for theme, padding, background, etc.

@@ -81,13 +81,13 @@ function getLanguageName() {
 }
 
 function activate(context) {
-
   const config = vscode.workspace.getConfiguration("ray-this");
   const background = config.get("background");
   const darkMode = config.get("darkMode");
   const padding = config.get("padding");
   const theme = config.get("theme");
-	
+  const title = path.basename(vscode.window.activeTextEditor.document.fileName);
+  
 	const publishSelectedSnippet = vscode.commands.registerCommand("ray-this.publishSelectedSnippet", () => {
 		const { 
 			activeTextEditor, 
@@ -116,11 +116,11 @@ function activate(context) {
 		// * Generate URL & open in default browser,
 		// * then send success message.
 		const url = generateRayUrl(correctIndentation(selectedContent), {
-			title: path.basename(vscode.window.activeTextEditor.document.fileName),
-      background: background,
-      darkMode: darkMode,
+			background: background,
+			darkMode: darkMode,
 			padding: padding,
-			theme: theme
+			theme: theme,
+			title: title
 		});
 		
 		showInformationMessage(

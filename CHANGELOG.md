@@ -20,3 +20,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Fixed
 - Single line uploads were deleting the first two characters
 - Now trimming output to Ray.so.
+
+## [1.2.0] - 2024-04-18
+
+### Added
+- Config options for theme, padding, background, etc.
+- All the new themes provided by ray.so
+- Window title now defaults to the current file name instead of a congratulatory message
+
+## [1.2.1] - 2024-04-20
+
+### Fixed
+- Fixed version numbering, title, description, changelog and readme
