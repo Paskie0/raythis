@@ -54,7 +54,7 @@ const generateRayUrl = (
 	code,
 	options = {}
 ) => {
-	const objParams = {...options, code: generateEncodedCode(code), language: getLanguageName()},
+	const objParams = {...options, title: setTitleName(), code: generateEncodedCode(code), language: getLanguageName()},
 	      parameters = Object.keys(objParams).map(key => 
 			    `${key}=${encodeURIComponent(objParams[key])}`
 	      ).join("&");
@@ -69,6 +69,11 @@ function correctIndentation(text) {
 	});
 	const minimumLength = Math.min(...indents);
 	return lines.map(x => x.slice(minimumLength)).join("\n").trim();
+}
+
+function setTitleName() {
+	let title = vscode.workspace.getConfiguration("ray-this").get("title") === "fileName" ? path.basename(vscode.window.activeTextEditor.document.fileName) : decodeURIComponent("%E2%80%8B");
+	return title;
 }
 
 function getLanguageName() {
@@ -86,7 +91,6 @@ function activate(context) {
   const darkMode = config.get("darkMode");
   const padding = config.get("padding");
   const theme = config.get("theme");
-  const title = path.basename(vscode.window.activeTextEditor.document.fileName);
   
 	const publishSelectedSnippet = vscode.commands.registerCommand("ray-this.publishSelectedSnippet", () => {
 		const { 
@@ -119,8 +123,7 @@ function activate(context) {
 			background: background,
 			darkMode: darkMode,
 			padding: padding,
-			theme: theme,
-			title: title
+			theme: theme
 		});
 		
 		showInformationMessage(

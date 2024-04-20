@@ -32,3 +32,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 - Fixed version numbering, title, description, changelog and readme
+
+## [1.3.0] - 2024-04-20
+
+### Added
+- Added an option to switch the title between fileName (e.g. index.html) and none (invisible character)
+- Added a context menu option for easy access
+- Added a lil picture emoji to the publish command 🖼️
