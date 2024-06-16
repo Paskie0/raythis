@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const open = require("open");
 const vscode = require("vscode");
@@ -11,7 +11,8 @@ const filetypes = JSON.parse(fs.readFileSync(path.resolve(__dirname, "filetypes.
  * @param {String} str - The string to be encoded.
  * @returns {String} Base64 Encoded String
  */
-const generateEncodedCode = str => Buffer.from(str).toString("base64");
+
+const generateEncodedCode = (str) => Buffer.from(str).toString("base64");
 
 /**
  * Generate a URL from using the script-commands
@@ -19,7 +20,7 @@ const generateEncodedCode = str => Buffer.from(str).toString("base64");
  * @param {Object} [options]
 		Query parameters to be used to 
 		construct the completed request.
-	* @param {('breeze'|'candy'|'crimson'|'falcon'|'meadow'|'midnight'|'mono'|'raindrop'|'sunset')} [options.theme]
+	* @param {('vercel'|'supabase'|'tailwind'|'bitmap'|'noir'|'ice'|'sand'|'forest'|'mono'|'breeze'|'candy'|'crimson'|'falcon'|'meadow'|'midnight'|'raindrop'|'sunset')} [options.theme]
 		The color scheme you want the
 		uploaded code to have.
 	* @param {(
@@ -50,90 +51,101 @@ const generateEncodedCode = str => Buffer.from(str).toString("base64");
 		The snippet of code.
 	* @returns {String} Returns the URL of the snippet.
 */
-const generateRayUrl = (
-	code,
-	options = {}
-) => {
-	const objParams = {...options, title: setTitleName(), code: generateEncodedCode(code), language: getLanguageName()},
-	      parameters = Object.keys(objParams).map(key => 
-			    `${key}=${encodeURIComponent(objParams[key])}`
-	      ).join("&");
-		  
-	return "https://ray.so/#" + parameters;
-}
+const generateRayUrl = (code, options = {}) => {
+  const objParams = {...options, title: setTitleName(), code: generateEncodedCode(code), language: getLanguageName()},
+    parameters = Object.keys(objParams)
+      .map((key) => `${key}=${encodeURIComponent(objParams[key])}`)
+      .join("&");
+
+  return "https://ray.so/#" + parameters;
+};
 
 function correctIndentation(text) {
-	const lines = text.split("\n");
-	const indents = lines.filter(Boolean).map(line => {
-		return (line.split(/[^\t\s]/)[0] || "").length;
-	});
-	const minimumLength = Math.min(...indents);
-	return lines.map(x => x.slice(minimumLength)).join("\n").trim();
+  const lines = text.split("\n");
+  const indents = lines.filter(Boolean).map((line) => {
+    return (line.split(/[^\t\s]/)[0] || "").length;
+  });
+  const minimumLength = Math.min(...indents);
+  return lines
+    .map((x) => x.slice(minimumLength))
+    .join("\n")
+    .trim();
 }
 
 function setTitleName() {
-	let title = vscode.workspace.getConfiguration("ray-this").get("title") === "fileName" ? path.basename(vscode.window.activeTextEditor.document.fileName) : decodeURIComponent("%E2%80%8B");
-	return title;
+  let title =
+    vscode.workspace.getConfiguration("ray-this").get("title") === "fileName"
+      ? path.basename(vscode.window.activeTextEditor.document.fileName)
+      : decodeURIComponent("%E2%80%8B");
+  return title;
 }
 
 function getLanguageName() {
-	const tabFilePath = vscode.window.activeTextEditor.document.fileName;
-	const segments = tabFilePath.split(".");
-	if (!segments.length) return;
-	const extension = segments[segments.length - 1].toLowerCase();
-	const [language] = filetypes.filter(({ extensions }) => extensions.includes(extension));
-	return language ? language.value : "auto";
+  const tabFilePath = vscode.window.activeTextEditor.document.fileName;
+  const segments = tabFilePath.split(".");
+  if (!segments.length) return;
+  const extension = segments[segments.length - 1].toLowerCase();
+  const [language] = filetypes.filter(({extensions}) => extensions.includes(extension));
+  return language ? language.value : "auto";
 }
 
 function activate(context) {
-  const config = vscode.workspace.getConfiguration("ray-this");
-  const background = config.get("background");
-  const darkMode = config.get("darkMode");
-  const padding = config.get("padding");
-  const theme = config.get("theme");
-  
-	const publishSelectedSnippet = vscode.commands.registerCommand("ray-this.publishSelectedSnippet", () => {
-		const { 
-			activeTextEditor, 
-			showErrorMessage, 
-			showInformationMessage 
-		} = vscode.window;
+  let config = vscode.workspace.getConfiguration("ray-this");
+  let background = config.get("background");
+  let darkMode = config.get("darkMode");
+  let padding = config.get("padding");
+  let theme = config.get("theme");
 
-		// * If there is no active text editor,
-		// * return an error message.
-		if (!activeTextEditor)
-			return showErrorMessage(
-				`You need to have an open editor to upload a code snippet to Ray.so.
+  const updateConfiguration = () => {
+    config = vscode.workspace.getConfiguration("ray-this");
+    background = config.get("background");
+    darkMode = config.get("darkMode");
+    padding = config.get("padding");
+    theme = config.get("theme");
+  };
+
+  const publishSelectedSnippet = vscode.commands.registerCommand("ray-this.publishSelectedSnippet", () => {
+    const {activeTextEditor, showErrorMessage, showInformationMessage} = vscode.window;
+
+    // * If there is no active text editor,
+    // * return an error message.
+    if (!activeTextEditor)
+      return showErrorMessage(
+        `You need to have an open editor to upload a code snippet to Ray.so.
 				Please select a file and make a text selection to upload a snippet.`
-			)
-		
-		const selectedContent = activeTextEditor.document.getText(activeTextEditor.selection);
+      );
 
-		// * If there is no selected content,
-		// * return an error message.
-		if (!selectedContent)
-			return showErrorMessage(
-				`You have to have text selected to upload a snippet to Ray.so.
+    const selectedContent = activeTextEditor.document.getText(activeTextEditor.selection);
+
+    // * If there is no selected content,
+    // * return an error message.
+    if (!selectedContent)
+      return showErrorMessage(
+        `You have to have text selected to upload a snippet to Ray.so.
 				Please select the text you would like to be included in your snippet.`
-			);
+      );
 
-		// * Generate URL & open in default browser,
-		// * then send success message.
-		const url = generateRayUrl(correctIndentation(selectedContent), {
-			background: background,
-			darkMode: darkMode,
-			padding: padding,
-			theme: theme
-		});
-		
-		showInformationMessage(
-			`Successfully generated Ray.so snippet!`
-		);
+    // * Generate URL & open in default browser,
+    // * then send success message.
+    const url = generateRayUrl(correctIndentation(selectedContent), {
+      background: background,
+      darkMode: darkMode,
+      padding: padding,
+      theme: theme,
+    });
 
-		open(url);
-	});
+    showInformationMessage(`Successfully generated Ray.so snippet!`);
+
+    open(url);
+  });
 
   context.subscriptions.push(publishSelectedSnippet);
+
+  vscode.workspace.onDidChangeConfiguration((event) => {
+    if (event.affectsConfiguration("ray-this")) {
+      updateConfiguration();
+    }
+  });
 }
 
 // this method is called when your extension is deactivated
@@ -142,4 +154,4 @@ function deactivate() {}
 module.exports = {
   activate,
   deactivate,
-}
+};
